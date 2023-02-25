@@ -3,8 +3,12 @@ from bs4 import BeautifulSoup
 import chess.pgn
 import re
 import io
+import sys
 
-r = requests.get('https://lichess.org/RBf9Zlwr8j4r')
+id = sys.argv[1]
+
+url = "https://lichess.org/api/stream/game/" + id
+r = requests.get(url)
 soup = BeautifulSoup(r.content, 'html.parser')
 
 all_tables=soup.find_all('div', {'class':'pgn'} )
