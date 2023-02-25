@@ -66,15 +66,10 @@ def get_data(pgn_file):
         for key in data.keys():
             out_dict[key] = data.get(key)
 
-        print(out_dict)
+        mongo_write(out_dict)
 
-        # node = chess.pgn.read_game(pgn)
-        # json.dump(data, json_file, encoding='latin1')
-        # print(item)
-
-
-def mongo_write(data):
-    mycol.insert_many(data)
+def mongo_write(out_dict):
+    mycol.insert_one(out_dict)
 
 
 def convert_file(file_path):
