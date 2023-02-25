@@ -7,9 +7,10 @@ import pymongo
 # mydb = myclient["chess"]
 # mycol = mydb["developers"]
 
-id = sys.argv[1]
+# id = sys.argv[1]
 
-url = "https://lichess.org/api/stream/game/" + id
+
+url = "https://lichess.org/api/stream/game/yi2rNhT0"
 headers = {"Accept": "application/x-ldjson"}
 response = requests.get(url, headers=headers, stream=True)
 list_resp = response.text.splitlines()

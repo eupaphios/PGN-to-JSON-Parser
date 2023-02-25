@@ -3,12 +3,16 @@ from bs4 import BeautifulSoup
 import chess.pgn
 import re
 import io
-import sys
+import pymongo
+import logging
 
-id = sys.argv[1]
+log = logging.getLogger().error
 
-url = "https://lichess.org/api/stream/game/" + id
-r = requests.get(url)
+myclient = pymongo.MongoClient("mongodb://root:rootpassword@localhost:27017/")
+mydb = myclient["chess"]
+mycol = mydb["developers"]
+
+r = requests.get('https://lichess.org/yi2rNhT0')
 soup = BeautifulSoup(r.content, 'html.parser')
 
 all_tables=soup.find_all('div', {'class':'pgn'} )
@@ -23,4 +27,15 @@ while node.variations:
     data["moves"].append(
         re.sub("\{.*?\}", "", node.board().san(next_node.move)))
     node = next_node
-print (data["moves"])
+print(data["moves"])
+
+
+for i in range(len(data["moves"])):
+    print(data["moves"][i])
+    mycol.find({}, { "moves": 1 });
+    mycol.a
+
+    match = mycol.products.find({["moves",i]: data["moves"][i]})
+    print (match)
+#
+for match in mycol.find({ "moves" : { "$in" : data["moves"] } }):
