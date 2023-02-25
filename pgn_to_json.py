@@ -47,11 +47,13 @@ def get_file_list(local_path):
 
 
 def get_data(pgn_file):
+    countd = 0
     node = chess.pgn.read_game(pgn_file)
 
     while node is not None:
         data = node.headers
         data["moves"] = []
+        countd += 1
         
         while node.variations:
             next_node = node.variation(0)
@@ -64,13 +66,24 @@ def get_data(pgn_file):
         out_dict = {}
 
         for key in data.keys():
-            out_dict[key] = data.get(key)
+                if key == 'Result':
+                    out_dict['Result'] = result(data.get('Result'))
+                if key == 'moves':
+                    out_dict['moves'] = data.get('moves')
 
         mongo_write(out_dict)
+        log('insert'+' '+str(countd))
 
 def mongo_write(out_dict):
     mycol.insert_one(out_dict)
 
+def result(result):
+    if result == '1-0':
+        return "w"
+    elif result == '0-1':
+        return "b"
+    else:
+        return "d"
 
 def convert_file(file_path):
     log('convert file '+file_path.name)
