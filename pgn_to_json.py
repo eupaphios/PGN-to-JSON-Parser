@@ -30,8 +30,6 @@ if len(sys.argv) == 4:
 
 
 inp_dir = pathlib.Path(sys.argv[1])
-out_dir = pathlib.Path(sys.argv[2])
-
 
 
 def get_file_list(local_path):
@@ -50,60 +48,41 @@ def get_file_list(local_path):
 
 def get_data(pgn_file):
     node = chess.pgn.read_game(pgn_file)
-    
+
     while node is not None:
         data = node.headers
-
         data["moves"] = []
-        out_list = []
+        
         while node.variations:
             next_node = node.variation(0)
             data["moves"].append(
                     re.sub("\{.*?\}", "", node.board().san(next_node.move)))
             node = next_node
 
-        # print(data)
-        # dict = { "name": "Kiku", "address": "Germany" }
-        for item in enumerate(data):
-            out_list.append(item)
-        # print(out_list)
-        print(json.dumps(out_list))
-        # mongo_write(json.dumps(out_list))
+        node = chess.pgn.read_game(pgn_file)
 
-        # node = chess.pgn.read_game(pgn_file)
+        out_dict = {}
 
-        # out_dict = {}
+        for key in data.keys():
+            out_dict[key] = data.get(key)
 
-        # for key in data.keys():
-        #     out_dict[key] = data.get(key)
+        print(out_dict)
 
-        # # log(data.get('Event'))
-        # yield out_dict
+        # node = chess.pgn.read_game(pgn)
+        # json.dump(data, json_file, encoding='latin1')
+        # print(item)
+
 
 def mongo_write(data):
     mycol.insert_many(data)
 
 
 def convert_file(file_path):
-    file_name = file_path.name.replace(file_path.suffix, '') + '.json'
     log('convert file '+file_path.name)
-    # out_list = []
-    # try:
-    json_file = open(str(out_dir / file_name), 'w')
     pgn_file = open(str(file_path), encoding='ISO-8859-1')
     get_data(pgn_file)
 
-    #     for count_d, data in enumerate(get_data(pgn_file), start=0):
-    #         log(file_path.name+' '+str(count_d))
-    #         out_list.append(data)
 
-    #     # log(' save '+file_path.name)
-    #     json.dump(out_list, json_file)
-    #     json_file.close()
-    #     log('done')
-    # except Exception as e:
-    #     log(traceback.format_exc(10))
-    #     log('ERROR file '+file_name+' not converted')
 
 
 file_list = get_file_list(inp_dir)
