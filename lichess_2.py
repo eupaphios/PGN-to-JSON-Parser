@@ -29,13 +29,19 @@ while node.variations:
     node = next_node
 print(data["moves"])
 
-
-for i in range(len(data["moves"])):
-    print(data["moves"][i])
-    mycol.find({}, { "moves": 1 });
-    mycol.a
-
-    match = mycol.products.find({["moves",i]: data["moves"][i]})
-    print (match)
+# moveSize=len(data["moves"])
+# stringMove=""
+# for i in range(moveSize):
+#     stringMove += ""moves.""+str(i)+"" : "+data["moves"][i]+","
+#     if i == moveSize-1:
+#         stringMove += "moves."+str(i)+" : "+data["moves"][i]+" , ""Result: w"
+# print(stringMove)
 #
-for match in mycol.find({ "moves" : { "$in" : data["moves"] } }):
+# pat = re.compile(stringMove, re.I)
+# print(pat)
+# match = mycol.find({pat}, {"moves": {'$slice': 3}})
+# collection_cursor = eval(query)
+
+# print (match)
+#
+# for match in mycol.find({ "moves" : { "$in" : data["moves"] } }):
