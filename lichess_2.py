@@ -12,6 +12,7 @@ log = logging.getLogger().error
 myclient = pymongo.MongoClient("mongodb://root:rootpassword@localhost:27017/")
 mydb = myclient["chess"]
 mycol = mydb["developers"]
+side = 'w'
 
 r = requests.get('https://lichess.org/yi2rNhT0')
 soup = BeautifulSoup(r.content, 'html.parser')
@@ -31,7 +32,8 @@ moveSize=len(data["moves"])
 qb = Builder(collection=None)
 for i in range(moveSize):
     qb.field("moves."+str(i)+"").equals(data["moves"][i])
-    qb.field("Result").equals("w")
+    qb.field("Result").equals(side)
+    qb.
 
 print(qb.get_query_list())
 mycol.find(qb.get_query_list())
