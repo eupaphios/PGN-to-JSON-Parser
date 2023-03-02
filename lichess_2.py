@@ -41,11 +41,11 @@ qb.field("Result").equals(side)
 
 
 print(qb.get_query_list())
-for match in mycol.find(qb.get_query_list(), {"moves": {"$slice": sliceSize},"_id":0,"Result":0}):
-    print(match)
-     movesJson = json.loads(match)
-     print(movesJson["moves"][:sliceSize])
-
+for match in mycol.find(qb.get_query_list(), {"moves": {"$slice": sliceSize}, "_id": 0, "Result": 0}):
+    array = match.get("moves")
+    print(array)
+    if len(array) == sliceSize:
+        print(array[sliceSize-1])
 
 
 
