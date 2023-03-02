@@ -36,12 +36,13 @@ qb = Builder(collection=None)
 
 for i in range(moveSize):
     qb.field("moves."+str(i)+"").equals(data["moves"][i])
-qb.field("Result").equals(side).slice("moves", sliceSize)
+qb.field("Result").equals(side)
+qb.expr().slice(sliceSize)
 
 
 print(qb.get_query_list())
-for match in mycol.find(qb.get_query_list()):
-    print(match)
+# for match in mycol.find(qb.get_query_list()):
+#     print(match)
 
 # db.developers.find({"moves.0": "d4","Result": "w"})
 # moveSize=len(data["moves"])

@@ -11,4 +11,3 @@ chess~=1.9.4
 certifi~=2022.12.7
 setuptools~=65.5.1
 beautifulsoup4~=4.11.2
-rcquerybuilder~=0.1.2
