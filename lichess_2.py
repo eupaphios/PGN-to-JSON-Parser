@@ -5,7 +5,7 @@ import re
 import io
 import pymongo
 import logging
-import json
+from collections import Counter
 from Builder import Builder
 
 log = logging.getLogger().error
@@ -41,11 +41,14 @@ qb.field("Result").equals(side)
 
 
 print(qb.get_query_list())
+listEndMoves = []
 for match in mycol.find(qb.get_query_list(), {"moves": {"$slice": sliceSize}, "_id": 0, "Result": 0}):
     array = match.get("moves")
-    print(array)
+    # print(array)
     if len(array) == sliceSize:
-        print(array[sliceSize-1])
+        listEndMoves.append(array[sliceSize-1])
+        # print(array[sliceSize-1])
+print(Counter(listEndMoves).most_common(3))
 
 
 
