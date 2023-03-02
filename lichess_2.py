@@ -5,8 +5,8 @@ import re
 import io
 import pymongo
 import logging
+import json
 from Builder import Builder
-from Builder import Expr
 
 log = logging.getLogger().error
 
@@ -37,12 +37,17 @@ qb = Builder(collection=None)
 for i in range(moveSize):
     qb.field("moves."+str(i)+"").equals(data["moves"][i])
 qb.field("Result").equals(side)
-qb.expr().slice(sliceSize)
+# qb.find()
 
 
 print(qb.get_query_list())
-# for match in mycol.find(qb.get_query_list()):
-#     print(match)
+for match in mycol.find(qb.get_query_list(), {"moves": {"$slice": sliceSize},"_id":0,"Result":0}):
+    print(match)
+     movesJson = json.loads(match)
+     print(movesJson["moves"][:sliceSize])
+
+
+
 
 # db.developers.find({"moves.0": "d4","Result": "w"})
 # moveSize=len(data["moves"])
