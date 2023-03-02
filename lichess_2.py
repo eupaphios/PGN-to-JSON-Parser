@@ -5,7 +5,8 @@ import re
 import io
 import pymongo
 import logging
-from rcquerybuilder.builder import Builder
+from Builder import Builder
+from Builder import Expr
 
 log = logging.getLogger().error
 
@@ -14,7 +15,7 @@ mydb = myclient["chess"]
 mycol = mydb["developers"]
 side = 'w'
 
-r = requests.get('https://lichess.org/yi2rNhT0')
+r = requests.get('https://lichess.org/pwAEiqHT')
 soup = BeautifulSoup(r.content, 'html.parser')
 
 all_tables=soup.find_all('div', {'class':'pgn'} )
@@ -28,15 +29,19 @@ while node.variations:
     data["moves"].append(
         re.sub("\{.*?\}", "", node.board().san(next_node.move)))
     node = next_node
-moveSize=len(data["moves"])
+moveSize = len(data["moves"])
+sliceSize = moveSize+1
+print(sliceSize)
 qb = Builder(collection=None)
+
 for i in range(moveSize):
     qb.field("moves."+str(i)+"").equals(data["moves"][i])
-    qb.field("Result").equals(side)
-    qb.
+qb.field("Result").equals(side).slice("moves", sliceSize)
+
 
 print(qb.get_query_list())
-mycol.find(qb.get_query_list())
+for match in mycol.find(qb.get_query_list()):
+    print(match)
 
 # db.developers.find({"moves.0": "d4","Result": "w"})
 # moveSize=len(data["moves"])
